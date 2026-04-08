@@ -1,157 +1,150 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cathy's personal website!</title>
     <meta charset="utf-8">
+    <title>Cathy's personal website!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif;
-            background-color: #faf9f8;
+            background-color: #eef2f5;
             color: #1a1a1a;
-            line-height: 1.5;
-            padding: 2rem 1rem;
+            line-height: 1.6;
+            padding: 3rem 1rem;
         }
-
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
-
-        /* Header */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.25rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #eaeef2;
+        }
         .site-header {
-            border-bottom: 1px solid #e5e5e5;
-            padding-bottom: 1rem;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             display: flex;
             justify-content: space-between;
             align-items: baseline;
             flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0 0.5rem;
         }
-
         .site-title a {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             font-weight: 600;
             text-decoration: none;
             color: #1a1a1a;
+            letter-spacing: -0.4px;
         }
-
         .nav-links a {
             text-decoration: none;
             color: #555;
-            margin-left: 1.5rem;
-            font-size: 0.9rem;
+            margin-left: 1.8rem;
+            font-size: 0.95rem;
         }
-
         .nav-links a:hover {
             color: #000;
             text-decoration: underline;
         }
-
-        section {
-            margin-bottom: 3rem;
-        }
-
         h1 {
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             font-weight: 600;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.4px;
         }
-
         .subhead {
-            color: #555;
-            margin-bottom: 1.5rem;
-            border-left: 3px solid #ccc;
-            padding-left: 1rem;
+            color: #666;
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
         }
-
         h2 {
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.3rem;
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1.4rem;
+            letter-spacing: -0.25px;
+            color: #1a1a1a;
         }
-
         .job, .edu-item {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
-
         .job-title, .edu-title {
             font-weight: 600;
+            font-size: 1.05rem;
         }
-
         .job-place, .edu-place {
-            color: #555;
+            color: #666;
             font-size: 0.9rem;
+            margin-bottom: 0.3rem;
         }
-
-        /* Map section */
+        .job p {
+            font-size: 0.95rem;
+            color: #444;
+            margin-top: 0.4rem;
+        }
         .map-wrapper {
-            background: white;
+            background: #f8f9fa;
             border-radius: 12px;
             padding: 1rem;
-            margin: 1.5rem 0;
-            border: 1px solid #eaeaea;
-            pointer-events: none; /* This disables clicking on the map */
+            margin: 1.25rem 0;
+            overflow: hidden;
         }
-
+        #world-map {
+            width: 100%;
+            height: 480px;
+            border-radius: 8px;
+        }
         .legend {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin: 1rem 0;
-            font-size: 0.8rem;
+            gap: 2.2rem;
+            margin: 1.25rem 0 0;
+            font-size: 0.85rem;
+            color: #555;
+            flex-wrap: wrap;
         }
-
         .legend span {
             display: inline-block;
-            width: 14px;
-            height: 14px;
-            border-radius: 2px;
-            margin-right: 6px;
+            width: 15px;
+            height: 15px;
+            border-radius: 4px;
+            margin-right: 7px;
+            vertical-align: middle;
         }
-
         .visited-color { background-color: #2c7a4d; }
         .want-color { background-color: #d9a13b; }
-        .none-color { background-color: #e2e4e6; }
-
-        /* Hide reset button since map is static */
-        .reset-hidden {
-            display: none;
-        }
+        .none-color { background-color: #94a3b8; }
 
         footer {
             margin-top: 3rem;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #aaa;
-            border-top: 1px solid #eee;
-            padding-top: 2rem;
+            padding: 1.5rem;
         }
 
-        @media (max-width: 600px) {
-            .site-header {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            .nav-links a {
-                margin-left: 0;
-                margin-right: 1rem;
-            }
-            .legend {
-                gap: 1rem;
-            }
+        @media (max-width: 640px) {
+            body { padding: 1.75rem 1rem; }
+            .card { padding: 1.75rem; }
+            .site-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .nav-links a { margin-left: 0; margin-right: 1.5rem; }
+            #world-map { height: 380px; }
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <!-- Header -->
     <div class="site-header">
@@ -159,138 +152,152 @@
             <a href="index.html">Cathy</a>
         </div>
         <div class="nav-links">
-            <a href="index.html">Home</a>
+            <a href="#">Home</a>
             <a href="#map-section">Map</a>
         </div>
     </div>
 
-    <!-- About section -->
-    <section>
+    <!-- About -->
+    <div class="card">
         <h1>Hi, I'm Cathy 👋</h1>
         <div class="subhead">
-            ibgm student at HKU
+            IBGM student at HKU
         </div>
-        <p>My favourite hobby includes novel writing and thinking.</p>
-    </section>
+        <p>My favourite hobbies include novel writing and thinking.</p>
+    </div>
 
-    <!-- Work section -->
-    <section>
+    <!-- Work Experience -->
+    <div class="card">
         <h2>Cool places I worked at</h2>
         <div class="job">
             <div class="job-title">Intern</div>
             <div class="job-place">KPMG — Winter 2025</div>
-            <p>What did I do? I audited. I also printed 200+ pages of documents</p>
+            <p>I audited. I also printed 200+ pages of documents.</p>
         </div>
         <div class="job">
             <div class="job-title">Intern</div>
             <div class="job-place">Golden State Water Group — Summer 2024</div>
-            <p>Translating and documenting key points during product specification meetings</p>
+            <p>Translating and documenting key points during product specification meetings.</p>
         </div>
-    </section>
+    </div>
 
-    <!-- Education section -->
-    <section>
+    <!-- Education -->
+    <div class="card">
         <h2>Education</h2>
         <div class="edu-item">
             <div class="edu-title">B.S. in IBGM</div>
             <div class="edu-place">HKU, Hong Kong · 2023–2027</div>
         </div>
-    </section>
+    </div>
 
-    <!-- World Map section (STATIC - no clicking) -->
-    <section id="map-section">
+    <!-- Map Section -->
+    <div class="card" id="map-section">
         <h2>🗺️ Countries I've visited</h2>
-        <p>🌍 Green = visited · Gold = want to go · Grey = not yet</p>
-
+        <p style="margin-bottom: 0.75rem; font-size: 0.95rem; color: #555;">
+            Drag to move • Scroll to zoom • Hover for country name
+        </p>
         <div class="map-wrapper">
-            <div id="world-map" style="width:100%; min-height: 400px;"></div>
+            <div id="world-map"></div>
         </div>
-
         <div class="legend">
             <div><span class="visited-color"></span> Visited</div>
             <div><span class="want-color"></span> Want to go</div>
             <div><span class="none-color"></span> Not yet</div>
         </div>
-    </section>
+    </div>
 
     <footer>
-        Summer project · Built with GitHub Pages · Hong Kong
+        Summer project · Built with GitHub Pages & Leaflet · Hong Kong
     </footer>
 </div>
 
-<!-- Map libraries -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqvmap/1.5.1/jqvmap.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqvmap/1.5.1/jquery.vmap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqvmap/1.5.1/maps/jquery.vmap.world.js"></script>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/geojson-world@1.0.0/world.geo.json"></script>
 
 <script>
-$(document).ready(function() {
-    // ⬇️ EDIT THESE COUNTRY CODES to match your own travels ⬇️
-    
-    // Visited countries (green) - Replace with actual country codes you've been to
-    let visitedCountries = {
-        "CN": true,   // China (including Hong Kong)
-        "JP": true,   // Japan
-        "TH": true,   // Thailand
-        "SG": true,   // Singapore
-        "KR": true    // South Korea
-        "FR": true,   // France
-        "IT": true,   // Italy
-        "HR": true    // Croatia
-        "BE": true,   // Belgium
-        "NL": true,   // Netherlands
-        "MY": true    // Malaysia
-        "TW": true,   // Taiwan
-        "GB": true,   // Great britain including scotland
-        "AT": true,    // Austria
-        "CZ": true     // Czechia
-        
-    };
-    
-    // Want to visit countries (gold) - Replace with your dream destinations
-    let wantCountries = {
-        "IS": true,   // Iceland
-        "NZ": true,   // New Zealand
-        "NO": true,   // Norway
-        "CA": true    // Canada
-    };
-    
-    // ⬆️ EDIT ABOVE THIS LINE ⬆️
-    
-    // Build the color map
-    let countryColors = {};
-    
-    // First, set all countries to default grey
-    // Then override with visited (green) and want (gold)
-    
-    // Set visited countries to green
-    for (let code in visitedCountries) {
-        countryColors[code] = '#2c7a4d';
-    }
-    
-    // Set want-to-visit countries to gold
-    for (let code in wantCountries) {
-        countryColors[code] = '#d9a13b';
-    }
-    
-    // Initialize map with NO click handler (static)
-    $('#world-map').vectorMap({
-        map: 'world_en',
-        backgroundColor: 'transparent',
-        borderColor: '#dddddd',
-        borderOpacity: 0.8,
-        borderWidth: 0.5,
-        color: '#e2e4e6',        // default grey for unmarked countries
-        hoverColor: '#e2e4e6',   // no hover change (static)
-        selectedColor: '#2c7a4d',
-        enableZoom: false,
-        showTooltip: true,
-        colors: countryColors,     // pre-set colors
-        // No onRegionClick handler = map is static/read-only
-    });
+// Initialize the map
+const map = L.map('world-map', {
+    center: [20, 0],
+    zoom: 2,
+    minZoom: 1,
+    maxZoom: 6,
+    scrollWheelZoom: true
 });
+
+// Add nice light map tiles (similar to Hailey's style)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    className: 'map-tiles'
+}).addTo(map);
+
+// Country color function
+function getCountryColor(countryCode) {
+    const visited = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
+    const want = ["IS","NZ","NO","CA"];
+
+    if (visited.includes(countryCode)) return '#2c7a4d';   // green - visited
+    if (want.includes(countryCode)) return '#d9a13b';      // gold - want to go
+    return '#94a3b8';                                      // slate grey - not yet
+}
+
+// Style for countries
+function style(feature) {
+    const code = feature.properties.iso_a2 || feature.properties.ISO_A2;
+    return {
+        fillColor: getCountryColor(code),
+        weight: 1.2,
+        opacity: 1,
+        color: '#ffffff',
+        fillOpacity: 0.85
+    };
+}
+
+// Add country layer with hover effects
+const countryLayer = L.geoJSON(worldGeoJSON, {
+    style: style,
+    onEachFeature: function(feature, layer) {
+        const name = feature.properties.name || feature.properties.NAME || 'Unknown';
+        const code = feature.properties.iso_a2 || feature.properties.ISO_A2;
+
+        layer.bindTooltip(name, {
+            permanent: false,
+            direction: 'top',
+            className: 'country-tooltip'
+        });
+
+        // Hover highlight
+        layer.on({
+            mouseover: function(e) {
+                const l = e.target;
+                l.setStyle({
+                    weight: 2.5,
+                    color: '#1e2937',
+                    fillOpacity: 0.95
+                });
+                l.bringToFront();
+            },
+            mouseout: function(e) {
+                countryLayer.resetStyle(e.target);
+            }
+        });
+    }
+}).addTo(map);
+
+// Fit the map nicely
+map.fitBounds(countryLayer.getBounds(), { padding: [20, 20] });
 </script>
 
+<style>
+    .leaflet-tooltip.country-tooltip {
+        background: rgba(0,0,0,0.75);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 0.85rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+</style>
 </body>
 </html>
