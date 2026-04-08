@@ -20,9 +20,9 @@
         .card {
             background: white;
             border-radius: 16px;
-            padding: 2.25rem;
+            padding: 2.5rem;
             margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             border: 1px solid #eaeef2;
         }
         .site-header {
@@ -46,47 +46,75 @@
             font-size: 0.95rem;
         }
         .nav-links a:hover { color: #000; text-decoration: underline; }
+
         h1 { font-size: 2.1rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.4px; }
         .subhead { color: #666; margin-bottom: 1.25rem; font-size: 1.05rem; }
-        h2 { font-size: 1.35rem; font-weight: 600; margin-bottom: 1.4rem; letter-spacing: -0.25px; }
+
+        /* Map Section Styling to match screenshot */
+        .map-card h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .map-card p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
         .map-wrapper {
             background: #f8f9fa;
             border-radius: 12px;
             padding: 1rem;
-            margin: 1.25rem 0;
+            margin: 1.5rem 0;
         }
-        #world-map { width: 100%; height: 480px; border-radius: 8px; }
+        #world-map { width: 100%; height: 520px; border-radius: 8px; }
 
         .legend {
             display: flex;
             justify-content: center;
-            gap: 2.2rem;
-            margin-top: 1.25rem;
-            font-size: 0.85rem;
-            color: #555;
-            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
         }
         .legend span {
             display: inline-block;
-            width: 15px; height: 15px;
-            border-radius: 4px;
-            margin-right: 7px;
+            width: 16px; height: 16px;
+            border-radius: 3px;
+            margin-right: 8px;
+            vertical-align: middle;
         }
-        .visited-color { background-color: #2c7a4d; }
-        .want-color { background-color: #d9a13b; }
-        .none-color { background-color: #94a3b8; }
+        .visited-color { background-color: #6b9ac9; }   /* blue-grey like screenshot */
+        .notyet-color { background-color: #e5e7eb; }
+
+        .countries-visited {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .countries-visited h3 {
+            font-size: 1.25rem;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+        .continent {
+            margin-bottom: 1.25rem;
+        }
+        .continent-name {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 0.4rem;
+        }
+        .country-list {
+            color: #555;
+            font-size: 0.95rem;
+        }
 
         footer {
             margin-top: 3rem;
             text-align: center;
             font-size: 0.8rem;
             color: #aaa;
-        }
-
-        /* Very faint base map like Hailey's */
-        .leaflet-tile { 
-            filter: grayscale(95%) contrast(0.7) brightness(1.2); 
-            opacity: 0.15 !important;
         }
     </style>
 </head>
@@ -100,6 +128,7 @@
         </div>
     </div>
 
+    <!-- Other cards (About, Work, Education) remain the same -->
     <div class="card">
         <h1>Hi, I'm Cathy 👋</h1>
         <div class="subhead">IBGM student at HKU</div>
@@ -128,18 +157,38 @@
         </div>
     </div>
 
-    <div class="card" id="map-section">
-        <h2>🗺️ Countries I've visited</h2>
-        <p style="margin-bottom: 0.75rem; font-size: 0.95rem; color: #555;">
-            Drag to move • Scroll to zoom • Hover for country name
-        </p>
+    <!-- Map Section - Matching your screenshot -->
+    <div class="card map-card" id="map-section">
+        <h2>World Map.</h2>
+        <p>Countries I've visited and want to visit.</p>
+
         <div class="map-wrapper">
             <div id="world-map"></div>
         </div>
+
         <div class="legend">
             <div><span class="visited-color"></span> Visited</div>
-            <div><span class="want-color"></span> Want to go</div>
-            <div><span class="none-color"></span> Not yet</div>
+            <div><span class="notyet-color"></span> Not Yet Visited</div>
+            <div><span style="background:#9ca3af;"></span> Hover</div>
+        </div>
+
+        <div class="countries-visited">
+            <h3>Countries Visited</h3>
+            
+            <div class="continent">
+                <div class="continent-name">North America</div>
+                <div class="country-list">United States</div>
+            </div>
+            
+            <div class="continent">
+                <div class="continent-name">Asia</div>
+                <div class="country-list">China, Taiwan, Japan, South Korea, Malaysia, Thailand</div>
+            </div>
+            
+            <div class="continent">
+                <div class="continent-name">Europe</div>
+                <div class="country-list">France, Italy, Croatia, Belgium, Netherlands, United Kingdom, Austria, Czechia</div>
+            </div>
         </div>
     </div>
 
@@ -164,23 +213,21 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: ''
 }).addTo(map);
 
-const visited = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
-const wantToGo = ["IS","NZ","NO","CA"];
+const visitedCodes = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
 
 function getCountryColor(code) {
-    if (visited.includes(code)) return '#2c7a4d';     // green
-    if (wantToGo.includes(code)) return '#d9a13b';    // gold
-    return '#94a3b8';                                 // grey
+    const upper = (code || '').toUpperCase();
+    return visitedCodes.includes(upper) ? '#6b9ac9' : '#e5e7eb';   // blue for visited, light grey for others
 }
 
 const countryLayer = L.geoJSON(worldGeoJSON, {
     style: function(feature) {
-        const code = (feature.properties.iso_a2 || feature.properties.ISO_A2 || '').toUpperCase();
+        const code = feature.properties.iso_a2 || feature.properties.ISO_A2 || '';
         return {
             fillColor: getCountryColor(code),
-            weight: 1.8,          // stronger borders
+            weight: 1.2,
             color: '#ffffff',
-            fillOpacity: 0.95     // high opacity so color shows clearly
+            fillOpacity: 0.9
         };
     },
     onEachFeature: function(feature, layer) {
@@ -192,7 +239,7 @@ const countryLayer = L.geoJSON(worldGeoJSON, {
 
         layer.on({
             mouseover: function(e) {
-                e.target.setStyle({ weight: 3.5, color: '#1e2937', fillOpacity: 1 });
+                e.target.setStyle({ weight: 3, color: '#374151', fillOpacity: 1 });
             },
             mouseout: function(e) {
                 countryLayer.resetStyle(e.target);
@@ -202,19 +249,17 @@ const countryLayer = L.geoJSON(worldGeoJSON, {
 }).addTo(map);
 
 map.fitBounds(countryLayer.getBounds(), { padding: [40, 40] });
-
-// Optional: Check in browser console if your countries are being colored
-console.log("Visited countries loaded:", visited);
 </script>
 
 <style>
     .leaflet-tooltip.country-tooltip {
-        background: rgba(15,23,42,0.85);
+        background: rgba(30, 64, 175, 0.9);
         color: white;
         border: none;
-        border-radius: 4px;
-        padding: 5px 9px;
-        font-size: 0.85rem;
+        border-radius: 6px;
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 </style>
 </body>
