@@ -98,6 +98,7 @@
             padding: 1rem;
             margin: 1.5rem 0;
             border: 1px solid #eaeaea;
+            pointer-events: none; /* This disables clicking on the map */
         }
 
         .legend {
@@ -120,19 +121,9 @@
         .want-color { background-color: #d9a13b; }
         .none-color { background-color: #e2e4e6; }
 
-        button {
-            background: none;
-            border: 1px solid #ccc;
-            padding: 5px 12px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            border-radius: 20px;
-            display: block;
-            margin: 0 auto 1rem auto;
-        }
-
-        button:hover {
-            background: #f0f0f0;
+        /* Hide reset button since map is static */
+        .reset-hidden {
+            display: none;
         }
 
         footer {
@@ -165,7 +156,7 @@
     <!-- Header -->
     <div class="site-header">
         <div class="site-title">
-            <a href="index.html">Your Name</a>
+            <a href="index.html">Cathy</a>
         </div>
         <div class="nav-links">
             <a href="index.html">Home</a>
@@ -201,15 +192,15 @@
     <section>
         <h2>Education</h2>
         <div class="edu-item">
-            <div class="edu-title">B.S. in [Your Major]</div>
-            <div class="edu-place">[Your University], Hong Kong · 2023–2027</div>
+            <div class="edu-title">B.S. in IBGM</div>
+            <div class="edu-place">HKU, Hong Kong · 2023–2027</div>
         </div>
     </section>
 
-    <!-- World Map section -->
+    <!-- World Map section (STATIC - no clicking) -->
     <section id="map-section">
         <h2>🗺️ Countries I've visited</h2>
-        <p>Click any country to mark it. Cycles: gray → green (visited) → gold (want to go) → gray.</p>
+        <p>🌍 Green = visited · Gold = want to go · Grey = not yet</p>
 
         <div class="map-wrapper">
             <div id="world-map" style="width:100%; min-height: 400px;"></div>
@@ -220,8 +211,6 @@
             <div><span class="want-color"></span> Want to go</div>
             <div><span class="none-color"></span> Not yet</div>
         </div>
-
-        <button id="reset-button">Reset map</button>
     </section>
 
     <footer>
@@ -237,50 +226,68 @@
 
 <script>
 $(document).ready(function() {
-    let visitedCountries = JSON.parse(localStorage.getItem('visitedCountries')) || {};
+    // ⬇️ EDIT THESE COUNTRY CODES to match your own travels ⬇️
     
+    // Visited countries (green) - Replace with actual country codes you've been to
+    let visitedCountries = {
+        "CN": true,   // China (including Hong Kong)
+        "JP": true,   // Japan
+        "TH": true,   // Thailand
+        "SG": true,   // Singapore
+        "KR": true    // South Korea
+        "FR": true,   // France
+        "IT": true,   // Italy
+        "HR": true    // Croatia
+        "BE": true,   // Belgium
+        "NL": true,   // Netherlands
+        "MY": true    // Malaysia
+        "TW": true,   // Taiwan
+        "GB": true,   // Great britain including scotland
+        "AT": true,    // Austria
+        "CZ": true     // Czechia
+        
+    };
+    
+    // Want to visit countries (gold) - Replace with your dream destinations
+    let wantCountries = {
+        "IS": true,   // Iceland
+        "NZ": true,   // New Zealand
+        "NO": true,   // Norway
+        "CA": true    // Canada
+    };
+    
+    // ⬆️ EDIT ABOVE THIS LINE ⬆️
+    
+    // Build the color map
+    let countryColors = {};
+    
+    // First, set all countries to default grey
+    // Then override with visited (green) and want (gold)
+    
+    // Set visited countries to green
+    for (let code in visitedCountries) {
+        countryColors[code] = '#2c7a4d';
+    }
+    
+    // Set want-to-visit countries to gold
+    for (let code in wantCountries) {
+        countryColors[code] = '#d9a13b';
+    }
+    
+    // Initialize map with NO click handler (static)
     $('#world-map').vectorMap({
         map: 'world_en',
         backgroundColor: 'transparent',
         borderColor: '#dddddd',
         borderOpacity: 0.8,
         borderWidth: 0.5,
-        color: '#e2e4e6',
-        hoverColor: '#c0c4c8',
+        color: '#e2e4e6',        // default grey for unmarked countries
+        hoverColor: '#e2e4e6',   // no hover change (static)
         selectedColor: '#2c7a4d',
         enableZoom: false,
         showTooltip: true,
-        onRegionClick: function(event, code) {
-            if (!visitedCountries[code] || visitedCountries[code] === 'none') {
-                visitedCountries[code] = 'visited';
-                $('#world-map').vectorMap('set', 'colors', {[code]: '#2c7a4d'});
-            } else if (visitedCountries[code] === 'visited') {
-                visitedCountries[code] = 'want';
-                $('#world-map').vectorMap('set', 'colors', {[code]: '#d9a13b'});
-            } else if (visitedCountries[code] === 'want') {
-                visitedCountries[code] = 'none';
-                $('#world-map').vectorMap('set', 'colors', {[code]: '#e2e4e6'});
-            }
-            localStorage.setItem('visitedCountries', JSON.stringify(visitedCountries));
-        },
-        onLoad: function(map) {
-            let colors = {};
-            for (let code in visitedCountries) {
-                if (visitedCountries[code] === 'visited') colors[code] = '#2c7a4d';
-                else if (visitedCountries[code] === 'want') colors[code] = '#d9a13b';
-                else colors[code] = '#e2e4e6';
-            }
-            map.setColors(colors);
-        }
-    });
-    
-    $('#reset-button').on('click', function() {
-        visitedCountries = {};
-        localStorage.removeItem('visitedCountries');
-        let allCodes = Object.keys($('#world-map').vectorMap('get', 'mapObject').regions);
-        let resetColors = {};
-        allCodes.forEach(code => { resetColors[code] = '#e2e4e6'; });
-        $('#world-map').vectorMap('set', 'colors', resetColors);
+        colors: countryColors,     // pre-set colors
+        // No onRegionClick handler = map is static/read-only
     });
 });
 </script>
