@@ -50,18 +50,17 @@
         h1 { font-size: 2.1rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.4px; }
         .subhead { color: #666; margin-bottom: 1.25rem; font-size: 1.05rem; }
 
-        /* Map Section Styling to match screenshot */
         .map-card h2 {
-            font-size: 1.8rem;
+            font-size: 1.85rem;
             font-weight: 600;
             text-align: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
-        .map-card p {
+        .map-card > p {
             text-align: center;
             color: #666;
-            margin-bottom: 1.5rem;
             font-size: 1.05rem;
+            margin-bottom: 1.5rem;
         }
         .map-wrapper {
             background: #f8f9fa;
@@ -76,7 +75,7 @@
             justify-content: center;
             gap: 2rem;
             margin: 1.5rem 0;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
         }
         .legend span {
             display: inline-block;
@@ -85,7 +84,7 @@
             margin-right: 8px;
             vertical-align: middle;
         }
-        .visited-color { background-color: #6b9ac9; }   /* blue-grey like screenshot */
+        .visited-color { background-color: #6b9ac9; }
         .notyet-color { background-color: #e5e7eb; }
 
         .countries-visited {
@@ -93,21 +92,20 @@
             text-align: center;
         }
         .countries-visited h3 {
-            font-size: 1.25rem;
-            color: #555;
-            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            color: #444;
+            margin-bottom: 1.2rem;
         }
-        .continent {
-            margin-bottom: 1.25rem;
-        }
+        .continent { margin-bottom: 1.4rem; }
         .continent-name {
             font-weight: 600;
-            color: #444;
-            margin-bottom: 0.4rem;
+            color: #555;
+            margin-bottom: 0.5rem;
         }
         .country-list {
             color: #555;
-            font-size: 0.95rem;
+            font-size: 0.97rem;
+            line-height: 1.5;
         }
 
         footer {
@@ -128,7 +126,6 @@
         </div>
     </div>
 
-    <!-- Other cards (About, Work, Education) remain the same -->
     <div class="card">
         <h1>Hi, I'm Cathy 👋</h1>
         <div class="subhead">IBGM student at HKU</div>
@@ -157,7 +154,6 @@
         </div>
     </div>
 
-    <!-- Map Section - Matching your screenshot -->
     <div class="card map-card" id="map-section">
         <h2>World Map.</h2>
         <p>Countries I've visited and want to visit.</p>
@@ -169,22 +165,15 @@
         <div class="legend">
             <div><span class="visited-color"></span> Visited</div>
             <div><span class="notyet-color"></span> Not Yet Visited</div>
-            <div><span style="background:#9ca3af;"></span> Hover</div>
+            <div><span style="background:#9ca3af; width:16px; height:16px; border-radius:3px; display:inline-block; vertical-align:middle; margin-right:8px;"></span> Hover</div>
         </div>
 
         <div class="countries-visited">
             <h3>Countries Visited</h3>
-            
-            <div class="continent">
-                <div class="continent-name">North America</div>
-                <div class="country-list">United States</div>
-            </div>
-            
             <div class="continent">
                 <div class="continent-name">Asia</div>
                 <div class="country-list">China, Taiwan, Japan, South Korea, Malaysia, Thailand</div>
             </div>
-            
             <div class="continent">
                 <div class="continent-name">Europe</div>
                 <div class="country-list">France, Italy, Croatia, Belgium, Netherlands, United Kingdom, Austria, Czechia</div>
@@ -198,68 +187,75 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/geojson-world@1.0.0/world.geo.json"></script>
 
 <script>
-const map = L.map('world-map', {
-    center: [20, 0],
-    zoom: 1.8,
-    minZoom: 1,
-    maxZoom: 5
-});
+// Load world GeoJSON from a reliable source
+fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+  .then(response => response.json())
+  .then(worldGeoJSON => {
+    const map = L.map('world-map', {
+        center: [25, 0],
+        zoom: 1.6,
+        minZoom: 1,
+        maxZoom: 5
+    });
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    opacity: 0.12,
-    attribution: ''
-}).addTo(map);
+    // Very faint base map
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        opacity: 0.08,
+        attribution: ''
+    }).addTo(map);
 
-const visitedCodes = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
+    const visitedCodes = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
 
-function getCountryColor(code) {
-    const upper = (code || '').toUpperCase();
-    return visitedCodes.includes(upper) ? '#6b9ac9' : '#e5e7eb';   // blue for visited, light grey for others
-}
-
-const countryLayer = L.geoJSON(worldGeoJSON, {
-    style: function(feature) {
-        const code = feature.properties.iso_a2 || feature.properties.ISO_A2 || '';
-        return {
-            fillColor: getCountryColor(code),
-            weight: 1.2,
-            color: '#ffffff',
-            fillOpacity: 0.9
-        };
-    },
-    onEachFeature: function(feature, layer) {
-        const name = feature.properties.name || 'Unknown';
-        layer.bindTooltip(name, {
-            direction: 'top',
-            className: 'country-tooltip'
-        });
-
-        layer.on({
-            mouseover: function(e) {
-                e.target.setStyle({ weight: 3, color: '#374151', fillOpacity: 1 });
-            },
-            mouseout: function(e) {
-                countryLayer.resetStyle(e.target);
-            }
-        });
+    function getCountryColor(code) {
+        const upper = (code || '').toUpperCase();
+        return visitedCodes.includes(upper) ? '#6b9ac9' : '#e5e7eb';
     }
-}).addTo(map);
 
-map.fitBounds(countryLayer.getBounds(), { padding: [40, 40] });
+    const countryLayer = L.geoJSON(worldGeoJSON, {
+        style: function(feature) {
+            const code = feature.properties.iso_a2 || feature.properties.ISO_A2 || '';
+            return {
+                fillColor: getCountryColor(code),
+                weight: 1.8,
+                color: '#ffffff',
+                fillOpacity: 0.95
+            };
+        },
+        onEachFeature: function(feature, layer) {
+            const name = feature.properties.name || 'Unknown';
+            layer.bindTooltip(name, {
+                direction: 'top',
+                className: 'country-tooltip'
+            });
+
+            layer.on({
+                mouseover: function(e) {
+                    e.target.setStyle({ weight: 3.5, color: '#1e3a8a', fillOpacity: 1 });
+                    e.target.bringToFront();
+                },
+                mouseout: function(e) {
+                    countryLayer.resetStyle(e.target);
+                }
+            });
+        }
+    }).addTo(map);
+
+    map.fitBounds(countryLayer.getBounds(), { padding: [50, 50] });
+  })
+  .catch(err => console.error("Failed to load map data:", err));
 </script>
 
 <style>
     .leaflet-tooltip.country-tooltip {
-        background: rgba(30, 64, 175, 0.9);
+        background: rgba(30, 58, 138, 0.92);
         color: white;
         border: none;
         border-radius: 6px;
-        padding: 6px 10px;
+        padding: 6px 11px;
         font-size: 0.9rem;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 </style>
 </body>
