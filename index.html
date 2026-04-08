@@ -142,6 +142,11 @@
             .nav-links a { margin-left: 0; margin-right: 1.5rem; }
             #world-map { height: 380px; }
         }
+
+        /* Hide map labels and make it flat/minimal */
+        .leaflet-tile {
+            filter: grayscale(100%) contrast(0.85) brightness(1.1);
+        }
     </style>
 </head>
 <body>
@@ -216,49 +221,49 @@
 <script src="https://unpkg.com/geojson-world@1.0.0/world.geo.json"></script>
 
 <script>
-// Initialize the map
+// Initialize map with flat style
 const map = L.map('world-map', {
-    center: [20, 0],
-    zoom: 2,
+    center: [25, 10],
+    zoom: 1.8,
     minZoom: 1,
-    maxZoom: 6,
-    scrollWheelZoom: true
+    maxZoom: 5,
+    scrollWheelZoom: true,
+    zoomControl: true
 });
 
-// Add nice light map tiles (similar to Hailey's style)
+// Very light / almost invisible tiles so only colored countries stand out
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-    className: 'map-tiles'
+    opacity: 0.08,           // very faint
+    attribution: ''
 }).addTo(map);
 
-// Country color function
-function getCountryColor(countryCode) {
+// Color function
+function getCountryColor(code) {
     const visited = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
     const want = ["IS","NZ","NO","CA"];
 
-    if (visited.includes(countryCode)) return '#2c7a4d';   // green - visited
-    if (want.includes(countryCode)) return '#d9a13b';      // gold - want to go
-    return '#94a3b8';                                      // slate grey - not yet
+    if (visited.includes(code)) return '#2c7a4d';
+    if (want.includes(code)) return '#d9a13b';
+    return '#94a3b8';
 }
 
-// Style for countries
+// Style for flat look
 function style(feature) {
     const code = feature.properties.iso_a2 || feature.properties.ISO_A2;
     return {
         fillColor: getCountryColor(code),
-        weight: 1.2,
+        weight: 1.5,
         opacity: 1,
         color: '#ffffff',
-        fillOpacity: 0.85
+        fillOpacity: 0.9
     };
 }
 
-// Add country layer with hover effects
+// Add countries
 const countryLayer = L.geoJSON(worldGeoJSON, {
     style: style,
     onEachFeature: function(feature, layer) {
-        const name = feature.properties.name || feature.properties.NAME || 'Unknown';
-        const code = feature.properties.iso_a2 || feature.properties.ISO_A2;
+        const name = feature.properties.name || 'Unknown';
 
         layer.bindTooltip(name, {
             permanent: false,
@@ -266,16 +271,13 @@ const countryLayer = L.geoJSON(worldGeoJSON, {
             className: 'country-tooltip'
         });
 
-        // Hover highlight
         layer.on({
             mouseover: function(e) {
-                const l = e.target;
-                l.setStyle({
-                    weight: 2.5,
+                e.target.setStyle({
+                    weight: 3,
                     color: '#1e2937',
-                    fillOpacity: 0.95
+                    fillOpacity: 1
                 });
-                l.bringToFront();
             },
             mouseout: function(e) {
                 countryLayer.resetStyle(e.target);
@@ -285,18 +287,22 @@ const countryLayer = L.geoJSON(worldGeoJSON, {
 }).addTo(map);
 
 // Fit the map nicely
-map.fitBounds(countryLayer.getBounds(), { padding: [20, 20] });
+map.fitBounds(countryLayer.getBounds(), { padding: [30, 30] });
 </script>
 
 <style>
     .leaflet-tooltip.country-tooltip {
-        background: rgba(0,0,0,0.75);
+        background: rgba(15, 23, 42, 0.85);
         color: white;
         border: none;
         border-radius: 4px;
-        padding: 4px 8px;
+        padding: 5px 9px;
         font-size: 0.85rem;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    }
+    /* Make the map even cleaner */
+    .leaflet-container {
+        background: #f8fafc;
     }
 </style>
 </body>
