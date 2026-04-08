@@ -83,10 +83,10 @@
             color: #aaa;
         }
 
-        /* Make base map very faint like Hailey's */
+        /* Very faint base map like Hailey's */
         .leaflet-tile { 
-            filter: grayscale(90%) contrast(0.75) brightness(1.15); 
-            opacity: 0.25 !important;   /* key change for flat look */
+            filter: grayscale(95%) contrast(0.7) brightness(1.2); 
+            opacity: 0.15 !important;
         }
     </style>
 </head>
@@ -151,4 +151,71 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/geojson-world@1.0.0/world.geo.json"></script>
 
-<script
+<script>
+const map = L.map('world-map', {
+    center: [20, 0],
+    zoom: 1.8,
+    minZoom: 1,
+    maxZoom: 5
+});
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    opacity: 0.12,
+    attribution: ''
+}).addTo(map);
+
+const visited = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
+const wantToGo = ["IS","NZ","NO","CA"];
+
+function getCountryColor(code) {
+    if (visited.includes(code)) return '#2c7a4d';     // green
+    if (wantToGo.includes(code)) return '#d9a13b';    // gold
+    return '#94a3b8';                                 // grey
+}
+
+const countryLayer = L.geoJSON(worldGeoJSON, {
+    style: function(feature) {
+        const code = (feature.properties.iso_a2 || feature.properties.ISO_A2 || '').toUpperCase();
+        return {
+            fillColor: getCountryColor(code),
+            weight: 1.8,          // stronger borders
+            color: '#ffffff',
+            fillOpacity: 0.95     // high opacity so color shows clearly
+        };
+    },
+    onEachFeature: function(feature, layer) {
+        const name = feature.properties.name || 'Unknown';
+        layer.bindTooltip(name, {
+            direction: 'top',
+            className: 'country-tooltip'
+        });
+
+        layer.on({
+            mouseover: function(e) {
+                e.target.setStyle({ weight: 3.5, color: '#1e2937', fillOpacity: 1 });
+            },
+            mouseout: function(e) {
+                countryLayer.resetStyle(e.target);
+            }
+        });
+    }
+}).addTo(map);
+
+map.fitBounds(countryLayer.getBounds(), { padding: [40, 40] });
+
+// Optional: Check in browser console if your countries are being colored
+console.log("Visited countries loaded:", visited);
+</script>
+
+<style>
+    .leaflet-tooltip.country-tooltip {
+        background: rgba(15,23,42,0.85);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 9px;
+        font-size: 0.85rem;
+    }
+</style>
+</body>
+</html>
