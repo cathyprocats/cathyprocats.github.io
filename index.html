@@ -189,7 +189,6 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-// Load world GeoJSON from a reliable source
 fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
   .then(response => response.json())
   .then(worldGeoJSON => {
@@ -197,10 +196,10 @@ fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.g
         center: [25, 0],
         zoom: 1.6,
         minZoom: 1,
-        maxZoom: 5
+        maxZoom: 5,
+        worldCopyJump: true
     });
 
-    // Very faint base map
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.08,
         attribution: ''
@@ -208,23 +207,32 @@ fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.g
 
     const visitedCodes = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
 
-    function getCountryColor(code) {
+    // Base colors
+    const normalVisited = '#6b9ac9';     // normal blue for visited
+    const hoverVisited  = '#4a7ab3';     // darker blue on hover
+    const normalNot     = '#e5e7eb';     // light grey
+    const hoverNot      = '#8fb0e0';     // brighter blue on hover for non-visited
+
+    function getNormalColor(code) {
         const upper = (code || '').toUpperCase();
-        return visitedCodes.includes(upper) ? '#6b9ac9' : '#e5e7eb';
+        return visitedCodes.includes(upper) ? normalVisited : normalNot;
     }
 
     const countryLayer = L.geoJSON(worldGeoJSON, {
         style: function(feature) {
             const code = feature.properties.iso_a2 || feature.properties.ISO_A2 || '';
             return {
-                fillColor: getCountryColor(code),
-                weight: 1.8,
+                fillColor: getNormalColor(code),
+                weight: 1.5,
                 color: '#ffffff',
                 fillOpacity: 0.95
             };
         },
         onEachFeature: function(feature, layer) {
             const name = feature.properties.name || 'Unknown';
+            const code = feature.properties.iso_a2 || feature.properties.ISO_A2 || '';
+            const isVisited = visitedCodes.includes(code.toUpperCase());
+
             layer.bindTooltip(name, {
                 direction: 'top',
                 className: 'country-tooltip'
@@ -232,8 +240,13 @@ fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.g
 
             layer.on({
                 mouseover: function(e) {
-                    e.target.setStyle({ weight: 3.5, color: '#1e3a8a', fillOpacity: 1 });
-                    e.target.bringToFront();
+                    const target = e.target;
+                    const newColor = isVisited ? hoverVisited : hoverNot;
+                    target.setStyle({
+                        fillColor: newColor,
+                        fillOpacity: 1
+                    });
+                    target.bringToFront();
                 },
                 mouseout: function(e) {
                     countryLayer.resetStyle(e.target);
@@ -242,7 +255,9 @@ fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.g
         }
     }).addTo(map);
 
-    map.fitBounds(countryLayer.getBounds(), { padding: [50, 50] });
+    const bounds = countryLayer.getBounds();
+    map.setMaxBounds(bounds.pad(0.2));
+    map.fitBounds(bounds, { padding: [50, 50] });
   })
   .catch(err => console.error("Failed to load map data:", err));
 </script>
