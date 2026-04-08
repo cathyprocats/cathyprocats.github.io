@@ -1,44 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Name</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
-            line-height: 1.6;
-            background-color: #f4f4f4;
-        }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h1 { color: #333; }
-        a { color: #0366d6; text-decoration: none; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h1>Hi, I'm [Your Name] 👋</h1>
-        <p>I study [your major] at [your university] in Hong Kong.</p>
-        <p>This summer I'm learning to build websites with $0 budget.</p>
-        <hr>
-        <h3>Find me:</h3>
-        <ul>
-            <li><a href="#">GitHub</a> (link to your profile)</li>
-            <li><a href="#">Email</a> (your@email.com)</li>
-        </ul>
-    </div>
-</body>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Countries - Your Name</title>
+    <title>Cathy's personal website!</title>
     <meta charset="utf-8">
     <style>
         * {
@@ -56,11 +19,11 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
-        /* Header / Navigation */
+        /* Header */
         .site-header {
             border-bottom: 1px solid #e5e5e5;
             padding-bottom: 1rem;
@@ -76,7 +39,6 @@
             font-weight: 600;
             text-decoration: none;
             color: #1a1a1a;
-            letter-spacing: -0.3px;
         }
 
         .nav-links a {
@@ -91,41 +53,59 @@
             text-decoration: underline;
         }
 
-        /* Map section */
+        section {
+            margin-bottom: 3rem;
+        }
+
         h1 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
+            margin-bottom: 0.3rem;
         }
 
         .subhead {
             color: #555;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             border-left: 3px solid #ccc;
             padding-left: 1rem;
         }
 
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.3rem;
+        }
+
+        .job, .edu-item {
+            margin-bottom: 1rem;
+        }
+
+        .job-title, .edu-title {
+            font-weight: 600;
+        }
+
+        .job-place, .edu-place {
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        /* Map section */
         .map-wrapper {
             background: white;
             border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             padding: 1rem;
-            margin: 2rem 0;
+            margin: 1.5rem 0;
             border: 1px solid #eaeaea;
-        }
-
-        svg {
-            width: 100%;
-            height: auto;
         }
 
         .legend {
             display: flex;
             justify-content: center;
             gap: 2rem;
-            margin: 2rem 0;
-            font-size: 0.85rem;
+            margin: 1rem 0;
+            font-size: 0.8rem;
         }
 
         .legend span {
@@ -143,63 +123,20 @@
         button {
             background: none;
             border: 1px solid #ccc;
-            padding: 6px 14px;
-            font-size: 0.8rem;
+            padding: 5px 12px;
+            font-size: 0.75rem;
             cursor: pointer;
             border-radius: 20px;
-            color: #333;
-            transition: 0.2s;
             display: block;
-            margin: 0 auto 2rem auto;
+            margin: 0 auto 1rem auto;
         }
 
         button:hover {
             background: #f0f0f0;
-            border-color: #999;
-        }
-
-        .country-list {
-            margin-top: 2rem;
-            border-top: 1px solid #eee;
-            padding-top: 1.5rem;
-        }
-
-        .country-list h3 {
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            color: #666;
-        }
-
-        .list-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .list-category {
-            flex: 1;
-            min-width: 150px;
-            background: #f8f8f8;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-        }
-
-        .list-category h4 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .list-category p {
-            font-size: 0.85rem;
-            color: #444;
         }
 
         footer {
-            margin-top: 4rem;
+            margin-top: 3rem;
             text-align: center;
             font-size: 0.75rem;
             color: #aaa;
@@ -207,7 +144,7 @@
             padding-top: 2rem;
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 600px) {
             .site-header {
                 flex-direction: column;
                 gap: 0.5rem;
@@ -218,66 +155,81 @@
             }
             .legend {
                 gap: 1rem;
-                flex-wrap: wrap;
             }
         }
     </style>
+</head>
+<body>
 
 <div class="container">
-    <!-- Simple header like haileycheng.com style -->
+    <!-- Header -->
     <div class="site-header">
         <div class="site-title">
-            <a href="index.html">YOUR NAME</a>
+            <a href="index.html">Your Name</a>
         </div>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            <a href="map.html">Map</a>
+            <a href="#map-section">Map</a>
         </div>
     </div>
 
-    <h1>🗺️ Countries</h1>
-    <div class="subhead">
-        Where I've been & where I'm going
-    </div>
-
-    <!-- Map will be injected here -->
-    <div class="map-wrapper" id="map-container">
-        <div id="world-map" style="width:100%; height: auto; min-height: 450px;"></div>
-    </div>
-
-    <div class="legend">
-        <div><span class="visited-color"></span> Visited</div>
-        <div><span class="want-color"></span> Want to go</div>
-        <div><span class="none-color"></span> Not yet</div>
-    </div>
-
-    <button id="reset-button">Reset all countries</button>
-
-    <!-- Fallback text list of countries -->
-    <div class="country-list">
-        <h3>📋 My list</h3>
-        <div class="list-grid">
-            <div class="list-category">
-                <h4>✅ Visited</h4>
-                <p>Hong Kong, China, Japan, Thailand, Singapore</p>
-            </div>
-            <div class="list-category">
-                <h4>✈️ Want to go</h4>
-                <p>South Korea, Taiwan, Vietnam, Italy, France</p>
-            </div>
-            <div class="list-category">
-                <h4>🌟 Dream</h4>
-                <p>Iceland, New Zealand, Norway, Kenya</p>
-            </div>
+    <!-- About section -->
+    <section>
+        <h1>Hi, I'm Cathy 👋</h1>
+        <div class="subhead">
+            ibgm student at HKU
         </div>
-    </div>
+        <p>My favourite hobby includes novel writing and thinking.</p>
+    </section>
+
+    <!-- Work section -->
+    <section>
+        <h2>Cool places I worked at</h2>
+        <div class="job">
+            <div class="job-title">Intern</div>
+            <div class="job-place">KPMG — Winter 2025</div>
+            <p>What did I do? I audited. I also printed 200+ pages of documents</p>
+        </div>
+        <div class="job">
+            <div class="job-title">Intern</div>
+            <div class="job-place">Golden State Water Group — Summer 2024</div>
+            <p>Translating and documenting key points during product specification meetings</p>
+        </div>
+    </section>
+
+    <!-- Education section -->
+    <section>
+        <h2>Education</h2>
+        <div class="edu-item">
+            <div class="edu-title">B.S. in [Your Major]</div>
+            <div class="edu-place">[Your University], Hong Kong · 2023–2027</div>
+        </div>
+    </section>
+
+    <!-- World Map section -->
+    <section id="map-section">
+        <h2>🗺️ Countries I've visited</h2>
+        <p>Click any country to mark it. Cycles: gray → green (visited) → gold (want to go) → gray.</p>
+
+        <div class="map-wrapper">
+            <div id="world-map" style="width:100%; min-height: 400px;"></div>
+        </div>
+
+        <div class="legend">
+            <div><span class="visited-color"></span> Visited</div>
+            <div><span class="want-color"></span> Want to go</div>
+            <div><span class="none-color"></span> Not yet</div>
+        </div>
+
+        <button id="reset-button">Reset map</button>
+    </section>
 
     <footer>
-        Summer project · Built with GitHub Pages
+        Summer project · Built with GitHub Pages · Hong Kong
     </footer>
 </div>
 
-<!-- jVectorMap library (free & simple) -->
+<!-- Map libraries -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqvmap/1.5.1/jqvmap.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqvmap/1.5.1/jquery.vmap.min.js"></script>
@@ -285,23 +237,20 @@
 
 <script>
 $(document).ready(function() {
-    // Load saved data from localStorage
     let visitedCountries = JSON.parse(localStorage.getItem('visitedCountries')) || {};
     
-    // Initialize the map
     $('#world-map').vectorMap({
         map: 'world_en',
         backgroundColor: 'transparent',
         borderColor: '#dddddd',
         borderOpacity: 0.8,
         borderWidth: 0.5,
-        color: '#e2e4e6',      // default color (not visited)
+        color: '#e2e4e6',
         hoverColor: '#c0c4c8',
-        selectedColor: '#2c7a4d', // will be overridden by our data
+        selectedColor: '#2c7a4d',
         enableZoom: false,
         showTooltip: true,
         onRegionClick: function(event, code) {
-            // Toggle colors: none -> visited -> want -> none
             if (!visitedCountries[code] || visitedCountries[code] === 'none') {
                 visitedCountries[code] = 'visited';
                 $('#world-map').vectorMap('set', 'colors', {[code]: '#2c7a4d'});
@@ -312,11 +261,9 @@ $(document).ready(function() {
                 visitedCountries[code] = 'none';
                 $('#world-map').vectorMap('set', 'colors', {[code]: '#e2e4e6'});
             }
-            // Save to localStorage
             localStorage.setItem('visitedCountries', JSON.stringify(visitedCountries));
         },
         onLoad: function(map) {
-            // Apply saved colors on load
             let colors = {};
             for (let code in visitedCountries) {
                 if (visitedCountries[code] === 'visited') colors[code] = '#2c7a4d';
@@ -327,11 +274,9 @@ $(document).ready(function() {
         }
     });
     
-    // Reset button
     $('#reset-button').on('click', function() {
         visitedCountries = {};
         localStorage.removeItem('visitedCountries');
-        // Reset all map colors to default
         let allCodes = Object.keys($('#world-map').vectorMap('get', 'mapObject').regions);
         let resetColors = {};
         allCodes.forEach(code => { resetColors[code] = '#e2e4e6'; });
@@ -340,6 +285,5 @@ $(document).ready(function() {
 });
 </script>
 
-<!-- Update the text list automatically? Not necessary, but keeps it clean -->
 </body>
 </html>
