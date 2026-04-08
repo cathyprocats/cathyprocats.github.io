@@ -5,26 +5,18 @@
     <title>Cathy's personal website!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #eef2f5;
             color: #1a1a1a;
             line-height: 1.6;
             padding: 3rem 1rem;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        .container { max-width: 900px; margin: 0 auto; }
         .card {
             background: white;
             border-radius: 16px;
@@ -40,14 +32,12 @@
             align-items: baseline;
             flex-wrap: wrap;
             gap: 1rem;
-            padding: 0 0.5rem;
         }
         .site-title a {
             font-size: 1.75rem;
             font-weight: 600;
             text-decoration: none;
             color: #1a1a1a;
-            letter-spacing: -0.4px;
         }
         .nav-links a {
             text-decoration: none;
@@ -55,73 +45,32 @@
             margin-left: 1.8rem;
             font-size: 0.95rem;
         }
-        .nav-links a:hover {
-            color: #000;
-            text-decoration: underline;
-        }
-        h1 {
-            font-size: 2.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.4px;
-        }
-        .subhead {
-            color: #666;
-            margin-bottom: 1.25rem;
-            font-size: 1.05rem;
-        }
-        h2 {
-            font-size: 1.35rem;
-            font-weight: 600;
-            margin-bottom: 1.4rem;
-            letter-spacing: -0.25px;
-            color: #1a1a1a;
-        }
-        .job, .edu-item {
-            margin-bottom: 1.5rem;
-        }
-        .job-title, .edu-title {
-            font-weight: 600;
-            font-size: 1.05rem;
-        }
-        .job-place, .edu-place {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
-        }
-        .job p {
-            font-size: 0.95rem;
-            color: #444;
-            margin-top: 0.4rem;
-        }
+        .nav-links a:hover { color: #000; text-decoration: underline; }
+        h1 { font-size: 2.1rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.4px; }
+        .subhead { color: #666; margin-bottom: 1.25rem; font-size: 1.05rem; }
+        h2 { font-size: 1.35rem; font-weight: 600; margin-bottom: 1.4rem; letter-spacing: -0.25px; }
         .map-wrapper {
             background: #f8f9fa;
             border-radius: 12px;
             padding: 1rem;
             margin: 1.25rem 0;
-            overflow: hidden;
         }
-        #world-map {
-            width: 100%;
-            height: 480px;
-            border-radius: 8px;
-        }
+        #world-map { width: 100%; height: 480px; border-radius: 8px; }
+
         .legend {
             display: flex;
             justify-content: center;
             gap: 2.2rem;
-            margin: 1.25rem 0 0;
+            margin-top: 1.25rem;
             font-size: 0.85rem;
             color: #555;
             flex-wrap: wrap;
         }
         .legend span {
             display: inline-block;
-            width: 15px;
-            height: 15px;
+            width: 15px; height: 15px;
             border-radius: 4px;
             margin-right: 7px;
-            vertical-align: middle;
         }
         .visited-color { background-color: #2c7a4d; }
         .want-color { background-color: #d9a13b; }
@@ -132,46 +81,31 @@
             text-align: center;
             font-size: 0.8rem;
             color: #aaa;
-            padding: 1.5rem;
         }
 
-        @media (max-width: 640px) {
-            body { padding: 1.75rem 1rem; }
-            .card { padding: 1.75rem; }
-            .site-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-            .nav-links a { margin-left: 0; margin-right: 1.5rem; }
-            #world-map { height: 380px; }
-        }
-
-        /* Hide map labels and make it flat/minimal */
-        .leaflet-tile {
-            filter: grayscale(100%) contrast(0.85) brightness(1.1);
+        /* Make base map very faint like Hailey's */
+        .leaflet-tile { 
+            filter: grayscale(90%) contrast(0.75) brightness(1.15); 
+            opacity: 0.25 !important;   /* key change for flat look */
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- Header -->
     <div class="site-header">
-        <div class="site-title">
-            <a href="index.html">Cathy</a>
-        </div>
+        <div class="site-title"><a href="index.html">Cathy</a></div>
         <div class="nav-links">
             <a href="#">Home</a>
             <a href="#map-section">Map</a>
         </div>
     </div>
 
-    <!-- About -->
     <div class="card">
         <h1>Hi, I'm Cathy 👋</h1>
-        <div class="subhead">
-            IBGM student at HKU
-        </div>
+        <div class="subhead">IBGM student at HKU</div>
         <p>My favourite hobbies include novel writing and thinking.</p>
     </div>
 
-    <!-- Work Experience -->
     <div class="card">
         <h2>Cool places I worked at</h2>
         <div class="job">
@@ -186,7 +120,6 @@
         </div>
     </div>
 
-    <!-- Education -->
     <div class="card">
         <h2>Education</h2>
         <div class="edu-item">
@@ -195,7 +128,6 @@
         </div>
     </div>
 
-    <!-- Map Section -->
     <div class="card" id="map-section">
         <h2>🗺️ Countries I've visited</h2>
         <p style="margin-bottom: 0.75rem; font-size: 0.95rem; color: #555;">
@@ -216,94 +148,7 @@
     </footer>
 </div>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/geojson-world@1.0.0/world.geo.json"></script>
 
-<script>
-// Initialize map with flat style
-const map = L.map('world-map', {
-    center: [25, 10],
-    zoom: 1.8,
-    minZoom: 1,
-    maxZoom: 5,
-    scrollWheelZoom: true,
-    zoomControl: true
-});
-
-// Very light / almost invisible tiles so only colored countries stand out
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    opacity: 0.08,           // very faint
-    attribution: ''
-}).addTo(map);
-
-// Color function
-function getCountryColor(code) {
-    const visited = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
-    const want = ["IS","NZ","NO","CA"];
-
-    if (visited.includes(code)) return '#2c7a4d';
-    if (want.includes(code)) return '#d9a13b';
-    return '#94a3b8';
-}
-
-// Style for flat look
-function style(feature) {
-    const code = feature.properties.iso_a2 || feature.properties.ISO_A2;
-    return {
-        fillColor: getCountryColor(code),
-        weight: 1.5,
-        opacity: 1,
-        color: '#ffffff',
-        fillOpacity: 0.9
-    };
-}
-
-// Add countries
-const countryLayer = L.geoJSON(worldGeoJSON, {
-    style: style,
-    onEachFeature: function(feature, layer) {
-        const name = feature.properties.name || 'Unknown';
-
-        layer.bindTooltip(name, {
-            permanent: false,
-            direction: 'top',
-            className: 'country-tooltip'
-        });
-
-        layer.on({
-            mouseover: function(e) {
-                e.target.setStyle({
-                    weight: 3,
-                    color: '#1e2937',
-                    fillOpacity: 1
-                });
-            },
-            mouseout: function(e) {
-                countryLayer.resetStyle(e.target);
-            }
-        });
-    }
-}).addTo(map);
-
-// Fit the map nicely
-map.fitBounds(countryLayer.getBounds(), { padding: [30, 30] });
-</script>
-
-<style>
-    .leaflet-tooltip.country-tooltip {
-        background: rgba(15, 23, 42, 0.85);
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 5px 9px;
-        font-size: 0.85rem;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-    }
-    /* Make the map even cleaner */
-    .leaflet-container {
-        background: #f8fafc;
-    }
-</style>
-</body>
-</html>
+<script
