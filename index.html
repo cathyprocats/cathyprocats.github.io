@@ -87,27 +87,6 @@
         .visited-color { background-color: #6b9ac9; }
         .notyet-color { background-color: #e5e7eb; }
 
-        .countries-visited {
-            margin-top: 2rem;
-            text-align: center;
-        }
-        .countries-visited h3 {
-            font-size: 1.3rem;
-            color: #444;
-            margin-bottom: 1.2rem;
-        }
-        .continent { margin-bottom: 1.4rem; }
-        .continent-name {
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 0.5rem;
-        }
-        .country-list {
-            color: #555;
-            font-size: 0.97rem;
-            line-height: 1.5;
-        }
-
         footer {
             margin-top: 3rem;
             text-align: center;
@@ -165,18 +144,17 @@
         <div class="legend">
             <div><span class="visited-color"></span> Visited</div>
             <div><span class="notyet-color"></span> Not Yet Visited</div>
-            <div><span style="background:#9ca3af; width:16px; height:16px; border-radius:3px; display:inline-block; vertical-align:middle; margin-right:8px;"></span> Hover</div>
         </div>
 
-        <div class="countries-visited">
-            <h3>Countries Visited</h3>
-            <div class="continent">
-                <div class="continent-name">Asia</div>
-                <div class="country-list">China, Taiwan, Japan, South Korea, Malaysia, Thailand</div>
+        <div class="countries-visited" style="margin-top:2rem; text-align:center;">
+            <h3 style="font-size:1.3rem; color:#444; margin-bottom:1.2rem;">Countries Visited</h3>
+            <div style="margin-bottom:1.4rem;">
+                <div style="font-weight:600; color:#555; margin-bottom:0.5rem;">Asia</div>
+                <div style="color:#555;">China, Taiwan, Japan, South Korea, Malaysia, Thailand</div>
             </div>
-            <div class="continent">
-                <div class="continent-name">Europe</div>
-                <div class="country-list">France, Italy, Croatia, Belgium, Netherlands, United Kingdom, Austria, Czechia</div>
+            <div>
+                <div style="font-weight:600; color:#555; margin-bottom:0.5rem;">Europe</div>
+                <div style="color:#555;">France, Italy, Croatia, Belgium, Netherlands, United Kingdom, Austria, Czechia</div>
             </div>
         </div>
     </div>
@@ -190,7 +168,7 @@
 
 <script>
 fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
-  .then(response => response.json())
+  .then(r => r.json())
   .then(worldGeoJSON => {
     const map = L.map('world-map', {
         center: [25, 0],
@@ -201,76 +179,52 @@ fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.g
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        opacity: 0.08,
+        opacity: 0.06,
         attribution: ''
     }).addTo(map);
 
-    const visitedCodes = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
+    const visited = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ","US","ES","CH","FI","VA","QA"];
 
-    // Base colors
-    const normalVisited = '#6b9ac9';     // normal blue for visited
-    const hoverVisited  = '#4a7ab3';     // darker blue on hover
-    const normalNot     = '#e5e7eb';     // light grey
-    const hoverNot      = '#8fb0e0';     // brighter blue on hover for non-visited
-
-    function getNormalColor(code) {
-        const upper = (code || '').toUpperCase();
-        return visitedCodes.includes(upper) ? normalVisited : normalNot;
+    function getColor(code) {
+        const c = (code || '').toUpperCase();
+        return visited.includes(c) ? '#5a8bc8' : '#e8eaed';
     }
 
     const countryLayer = L.geoJSON(worldGeoJSON, {
-        style: function(feature) {
-            const code = feature.properties.iso_a2 || feature.properties.ISO_A2 || '';
-            return {
-                fillColor: getNormalColor(code),
-                weight: 1.5,
-                color: '#ffffff',
-                fillOpacity: 0.95
-            };
-        },
-        onEachFeature: function(feature, layer) {
+        style: feature => ({
+            fillColor: getColor(feature.properties.iso_a2 || feature.properties.ISO_A2),
+            weight: 1.2,
+            color: '#ffffff',
+            fillOpacity: 0.97
+        }),
+        onEachFeature: (feature, layer) => {
             const name = feature.properties.name || 'Unknown';
-            const code = feature.properties.iso_a2 || feature.properties.ISO_A2 || '';
-            const isVisited = visitedCodes.includes(code.toUpperCase());
-
-            layer.bindTooltip(name, {
-                direction: 'top',
-                className: 'country-tooltip'
-            });
+            layer.bindTooltip(name, { direction: 'top', className: 'country-tooltip' });
 
             layer.on({
-                mouseover: function(e) {
-                    const target = e.target;
-                    const newColor = isVisited ? hoverVisited : hoverNot;
-                    target.setStyle({
-                        fillColor: newColor,
-                        fillOpacity: 1
+                mouseover: e => {
+                    const isVisited = visited.includes((feature.properties.iso_a2 || '').toUpperCase());
+                    e.target.setStyle({
+                        fillColor: isVisited ? '#3f6fa8' : '#8eb5e0'
                     });
-                    target.bringToFront();
                 },
-                mouseout: function(e) {
-                    countryLayer.resetStyle(e.target);
-                }
+                mouseout: e => countryLayer.resetStyle(e.target)
             });
         }
     }).addTo(map);
 
-    const bounds = countryLayer.getBounds();
-    map.setMaxBounds(bounds.pad(0.2));
-    map.fitBounds(bounds, { padding: [50, 50] });
-  })
-  .catch(err => console.error("Failed to load map data:", err));
+    map.fitBounds(countryLayer.getBounds(), { padding: [60, 60] });
+  });
 </script>
 
 <style>
     .leaflet-tooltip.country-tooltip {
-        background: rgba(30, 58, 138, 0.92);
+        background: rgba(30,58,138,0.9);
         color: white;
         border: none;
         border-radius: 6px;
         padding: 6px 11px;
         font-size: 0.9rem;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 </style>
 </body>
