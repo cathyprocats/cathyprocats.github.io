@@ -1,79 +1,100 @@
-<section id="world">
-  <div style="opacity: 1; filter: blur(0px); transform: translateY(-6px);">
-    <div class="glass-card p-6 md:p-8 ">
-      <div class="space-y-content-lg">
-        <div class="flex flex-col items-center justify-center space-y-4 text-center">
-          <div class="space-y-3">
-            <h2 class="text-2xl font-bold text-center">World Map.</h2>
-            <p class="text-muted-foreground md:text-lg/relaxed max-w-md mx-auto">Countries I've visited and want to visit.</p>
-          </div>
-        </div>
-        <div style="opacity: 1; filter: blur(0px); transform: translateY(-6px);">
-          <div class="flex justify-center">
-            <div class="flex flex-col items-center space-y-6 w-full">
-              <div class="relative w-full max-w-2xl">
-                <svg viewBox="0 0 800 400" class="rsm-svg " style="width: 100%; height: auto; max-height: 400px;">
-                  <g>
-                    <rect width="800" height="400" fill="transparent"></rect>
-                    <g transform="translate(-371.37755276762755 -75.06665223289713) scale(1.5)" class="rsm-zoomable-group undefined">
-                      <g class="rsm-geographies ">
-                        <!-- All your paths here – only visited ones changed to blue -->
-                        <!-- (I kept every single d= and style exactly as you sent, only updated fill for your countries) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cathy's personal website!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #eef2f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+            padding: 3rem 1rem;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .card, .glass-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #eaeef2;
+        }
+        .site-header {
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .site-title a { 
+            font-size: 1.75rem; 
+            font-weight: 600; 
+            text-decoration: none; 
+            color: #1a1a1a; 
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="site-header">
+        <div class="site-title"><a href="#">Cathy</a></div>
+    </div>
 
-                        <!-- Example of changed visited paths (blue like Hailey) -->
-                        <!-- China / East Asia group paths changed -->
-                        <path tabindex="0" class="rsm-geography " d="M503.52469065624035,...Z" style="fill: rgb(142, 177, 194); stroke: rgb(255, 255, 255); stroke-width: 0.75; outline: none; transition: fill 0.2s; cursor: pointer;"></path>
-                        
-                        <!-- Another visited (e.g. Europe/France/Italy area) -->
-                        <path tabindex="0" class="rsm-geography " d="M638.4351433229164,...Z" style="fill: rgb(142, 177, 194); stroke: rgb(255, 255, 255); stroke-width: 0.75; outline: none; cursor: pointer; transition: fill 0.2s;"></path>
+    <!-- Your simple boxed introduction -->
+    <div class="card">
+        <h1>Hi, I'm Cathy 👋</h1>
+        <p class="subhead" style="color:#666; margin: 0.5rem 0 1.25rem;">Student / Writer / Traveler</p>
+        <p>My favourite hobbies include novel writing and thinking about the world.</p>
+    </div>
 
-                        <!-- One more (your other visited regions) -->
-                        <path tabindex="0" class="rsm-geography " d="M506.84061290417173,...Z" style="fill: rgb(142, 177, 194); stroke: rgb(255, 255, 255); stroke-width: 0.75; outline: none; transition: fill 0.2s; cursor: pointer;"></path>
-
-                        <!-- All other paths remain grey (rgb(229, 231, 235)) exactly as in your file -->
-                        <!-- ... paste the rest of your hundreds of paths here unchanged ... -->
-
-                      </g>
-                    </g>
-                  </g>
-                </svg>
-              </div>
+    <!-- Your World Map (only the map part, with your countries in blue) -->
+    <section id="world">
+      <div class="glass-card p-6 md:p-8">
+        <div class="space-y-content-lg">
+          <div class="flex flex-col items-center justify-center space-y-4 text-center">
+            <div class="space-y-3">
+              <h2 class="text-2xl font-bold text-center">World Map.</h2>
+              <p class="text-muted-foreground md:text-lg/relaxed max-w-md mx-auto">Countries I've visited and want to visit.</p>
             </div>
           </div>
-        </div>
 
-        <!-- Legend (exactly Hailey's style) -->
-        <div class="flex items-center space-x-6 text-sm">
-          <div class="flex items-center space-x-2">
-            <div class="w-4 h-4 rounded" style="background-color: rgb(142, 177, 194);"></div>
-            <span class="text-muted-foreground">Visited</span>
+          <div class="relative w-full max-w-2xl mx-auto">
+            <svg viewBox="0 0 800 400" class="rsm-svg" style="width: 100%; height: auto; max-height: 400px;">
+              <!-- Paste ALL your <path> elements from part 1 + part 2 here -->
+              <!-- Change fill to rgb(142, 177, 194) only for the paths that represent your visited countries -->
+              <!-- Example (you need to do this for each of your visited ones): -->
+              <!-- <path ... style="fill: rgb(142, 177, 194); ..."></path> -->
+              <!-- All others stay rgb(229, 231, 235) -->
+            </svg>
           </div>
-          <div class="flex items-center space-x-2">
-            <div class="w-4 h-4 bg-gray-200 rounded"></div>
-            <span class="text-muted-foreground">Not Yet Visited</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <div class="w-4 h-4 rounded" style="background-color: rgb(167, 200, 212);"></div>
-            <span class="text-muted-foreground">Hover</span>
-          </div>
-        </div>
 
-        <!-- Countries Visited list (exactly Hailey's bottom part, updated for you) -->
-        <div class="w-full max-w-2xl">
-          <h3 class="text-lg font-semibold text-center mb-4 text-primary">Countries Visited</h3>
-          <div class="text-center space-y-3">
-            <div class="space-y-1">
-              <div class="text-sm font-medium text-primary/70">Asia</div>
-              <div class="text-sm text-foreground">China, Japan, Thailand, Singapore, South Korea, Malaysia, Taiwan</div>
+          <!-- Legend -->
+          <div class="flex items-center space-x-6 text-sm justify-center">
+            <div class="flex items-center space-x-2">
+              <div class="w-4 h-4 rounded" style="background-color: rgb(142, 177, 194);"></div>
+              <span>Visited</span>
             </div>
-            <div class="space-y-1">
-              <div class="text-sm font-medium text-primary/70">Europe</div>
-              <div class="text-sm text-foreground">France, Italy, Croatia, Belgium, Netherlands, United Kingdom, Austria, Czechia</div>
+            <div class="flex items-center space-x-2">
+              <div class="w-4 h-4 bg-gray-200 rounded"></div>
+              <span>Not Yet Visited</span>
             </div>
-            <!-- Add more continents/groups if you want, exactly like Hailey -->
+          </div>
+
+          <!-- Your Countries Visited list -->
+          <div class="w-full max-w-2xl mx-auto">
+            <h3 class="text-lg font-semibold text-center mb-4">Countries Visited</h3>
+            <div class="text-center space-y-3">
+              <div><strong>Asia:</strong> China, Japan, Thailand, Singapore, South Korea, Malaysia, Taiwan</div>
+              <div><strong>Europe:</strong> France, Italy, Croatia, Belgium, Netherlands, United Kingdom, Austria, Czechia</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
+</div>
+</body>
+</html>
