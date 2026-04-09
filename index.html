@@ -33,12 +33,7 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .site-title a {
-            font-size: 1.75rem;
-            font-weight: 600;
-            text-decoration: none;
-            color: #1a1a1a;
-        }
+        .site-title a { font-size: 1.75rem; font-weight: 600; text-decoration: none; color: #1a1a1a; }
         .nav-links a {
             text-decoration: none;
             color: #555;
@@ -50,18 +45,9 @@
         h1 { font-size: 2.1rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.4px; }
         .subhead { color: #666; margin-bottom: 1.25rem; font-size: 1.05rem; }
 
-        .map-card h2 {
-            font-size: 1.85rem;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 0.4rem;
-        }
-        .map-card > p {
-            text-align: center;
-            color: #666;
-            font-size: 1.05rem;
-            margin-bottom: 1.5rem;
-        }
+        .map-card h2 { font-size: 1.85rem; font-weight: 600; text-align: center; margin-bottom: 0.4rem; }
+        .map-card > p { text-align: center; color: #666; font-size: 1.05rem; margin-bottom: 1.5rem; }
+
         .map-wrapper {
             background: #f8f9fa;
             border-radius: 12px;
@@ -82,7 +68,6 @@
             width: 16px; height: 16px;
             border-radius: 3px;
             margin-right: 8px;
-            vertical-align: middle;
         }
         .visited-color { background-color: #6b9ac9; }
         .notyet-color { background-color: #e5e7eb; }
@@ -97,6 +82,7 @@
 </head>
 <body>
 <div class="container">
+    <!-- Your other sections (header, about, work, education) stay the same -->
     <div class="site-header">
         <div class="site-title"><a href="index.html">Cathy</a></div>
         <div class="nav-links">
@@ -133,6 +119,7 @@
         </div>
     </div>
 
+    <!-- Map Section -->
     <div class="card map-card" id="map-section">
         <h2>World Map.</h2>
         <p>Countries I've visited and want to visit.</p>
@@ -145,76 +132,63 @@
             <div><span class="visited-color"></span> Visited</div>
             <div><span class="notyet-color"></span> Not Yet Visited</div>
         </div>
-
-        <div class="countries-visited" style="margin-top:2rem; text-align:center;">
-            <h3 style="font-size:1.3rem; color:#444; margin-bottom:1.2rem;">Countries Visited</h3>
-            <div style="margin-bottom:1.4rem;">
-                <div style="font-weight:600; color:#555; margin-bottom:0.5rem;">Asia</div>
-                <div style="color:#555;">China, Taiwan, Japan, South Korea, Malaysia, Thailand</div>
-            </div>
-            <div>
-                <div style="font-weight:600; color:#555; margin-bottom:0.5rem;">Europe</div>
-                <div style="color:#555;">France, Italy, Croatia, Belgium, Netherlands, United Kingdom, Austria, Czechia</div>
-            </div>
-        </div>
     </div>
 
     <footer>
-        Summer project
+        Summer project · Built with GitHub Pages & Leaflet · Hong Kong
     </footer>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+// Reliable GeoJSON + strong color + better code matching
+fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
   .then(r => r.json())
-  .then(worldGeoJSON => {
+  .then(geojson => {
     const map = L.map('world-map', {
-        center: [25, 0],
-        zoom: 1.6,
+        center: [20, 0],
+        zoom: 1.7,
         minZoom: 1,
-        maxZoom: 5,
-        worldCopyJump: true
+        maxZoom: 5
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        opacity: 0.06,
+        opacity: 0.05,
         attribution: ''
     }).addTo(map);
 
-    const visited = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ","US","ES","CH","FI","VA","QA"];
+    const visited = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
 
-    function getColor(code) {
-        const c = (code || '').toUpperCase();
-        return visited.includes(c) ? '#5a8bc8' : '#e8eaed';
-    }
-
-    const countryLayer = L.geoJSON(worldGeoJSON, {
-        style: feature => ({
-            fillColor: getColor(feature.properties.iso_a2 || feature.properties.ISO_A2),
-            weight: 1.2,
-            color: '#ffffff',
-            fillOpacity: 0.97
-        }),
-        onEachFeature: (feature, layer) => {
-            const name = feature.properties.name || 'Unknown';
+    const countryLayer = L.geoJSON(geojson, {
+        style: function(feature) {
+            const props = feature.properties || {};
+            const code = (props.ISO_A2 || props.iso_a2 || props.ADM0_A3 || '').toUpperCase();
+            const color = visited.includes(code) ? '#6b9ac9' : '#e5e7eb';
+            return {
+                fillColor: color,
+                weight: 1,
+                color: '#ffffff',
+                fillOpacity: 0.98
+            };
+        },
+        onEachFeature: function(feature, layer) {
+            const name = feature.properties.ADMIN || feature.properties.name || 'Unknown';
             layer.bindTooltip(name, { direction: 'top', className: 'country-tooltip' });
 
+            const code = (feature.properties.ISO_A2 || feature.properties.iso_a2 || '').toUpperCase();
+            const isVisited = visited.includes(code);
+
             layer.on({
-                mouseover: e => {
-                    const isVisited = visited.includes((feature.properties.iso_a2 || '').toUpperCase());
-                    e.target.setStyle({
-                        fillColor: isVisited ? '#3f6fa8' : '#8eb5e0'
-                    });
-                },
+                mouseover: e => e.target.setStyle({ fillColor: isVisited ? '#3f6fa8' : '#9ab8e0' }),
                 mouseout: e => countryLayer.resetStyle(e.target)
             });
         }
     }).addTo(map);
 
-    map.fitBounds(countryLayer.getBounds(), { padding: [60, 60] });
-  });
+    map.fitBounds(countryLayer.getBounds(), { padding: [50, 50] });
+  })
+  .catch(err => console.error("Map load error:", err));
 </script>
 
 <style>
