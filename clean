@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cathy's personal website!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #eef2f5; padding: 3rem 1rem; margin: 0; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .card { background: white; border-radius: 16px; padding: 2.5rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        h1, h2 { margin-bottom: 0.5rem; }
+        .map-wrapper { background: #f8f9fa; border-radius: 12px; padding: 1rem; margin: 1.5rem 0; }
+        #world-map { width: 100%; height: 520px; border-radius: 8px; }
+        .legend { display: flex; justify-content: center; gap: 2rem; margin: 1.5rem 0; }
+        .legend span { display: inline-block; width: 16px; height: 16px; border-radius: 3px; margin-right: 8px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>Hi, I'm Cathy 👋</h1>
+        <p>IBGM student at HKU</p>
+    </div>
+
+    <div class="card map-card" id="map-section">
+        <h2>World Map.</h2>
+        <p>Countries I've visited and want to visit.</p>
+
+        <div class="map-wrapper">
+            <div id="world-map"></div>
+        </div>
+
+        <div class="legend">
+            <div><span style="background:#6b9ac9"></span> Visited</div>
+            <div><span style="background:#e5e7eb"></span> Not Yet Visited</div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+const visited = ["CN","JP","TH","SG","KR","FR","IT","HR","BE","NL","MY","TW","GB","AT","CZ"];
+
+fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
+  .then(r => r.json())
+  .then(data => {
+    console.log("✅ GeoJSON loaded - attempting to color countries");
+
+    const map = L.map('world-map', { center: [20, 0], zoom: 1.8 });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { opacity: 0.05 }).addTo(map);
+
+    L.geoJSON(data, {
+      style: feature => {
+        const code = (feature.properties.ISO_A2 || feature.properties.iso_a2 || '').toUpperCase();
+        return {
+          fillColor: visited.includes(code) ? '#6b9ac9' : '#e5e7eb',
+          weight: 1.2,
+          color: '#fff',
+          fillOpacity: 0.95
+        };
+      }
+    }).addTo(map);
+  })
+  .catch(e => console.error("Map failed:", e));
+</script>
+</body>
+</html>
